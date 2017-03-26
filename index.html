@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+       
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    
+    <title>Yeah</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      @import url(http://fonts.googleapis.com/css?family=Archivo+Black);
+
+      
+      html, .container-fluid{
+      }
+      
+      #map {
+        height: 765px;
+        width: 100%;
+      }
+      
+      #search-wrapper {
+        padding: 24px;
+        width: 50%;
+        margin: -250px 0 0 25%;
+      }            
+      
+      #custom-search-input{
+        padding: 3px;
+        /*border: solid 1px #000;*/
+        border-radius: 6px;
+        background-color: #fff;
+      }
+
+      #custom-search-input input{
+        border: 0;
+        box-shadow: none;
+      }
+
+      #custom-search-input button{
+        margin: 2px 0 0 0;
+        background: none;
+        box-shadow: none;
+        border: 0;
+        color: #333;
+        padding: 0 8px 0 10px;
+        /*border-left: solid 1px #ccc;*/
+      }
+
+      #custom-search-input button:hover{
+        border: 0;
+        box-shadow: none;
+        color: #000;
+        /*border-left: solid 1px #ccc;*/
+      }
+
+      #custom-search-input .glyphicon-search{
+        font-size: 23px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">     
+        <script>
+          var marker;
+          
+          function init() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+              zoom: 9,
+              center: {lat: 33.792963, lng:  -84.324819} //emory geocode
+            }); //initialize new goog maps object
+            var geocoder = new google.maps.Geocoder() //create new Geocode obj
+            $('#submit').click (function() { //when click even triggered
+            geocodeAddress(geocoder, map); //call fn geocodeAddress
+            //displayTweets(); //display markers of tweets, append author/text
+            });
+          }
+
+          function geocodeAddress(geocoder, resultsMap) {
+            var address = $('#query').val(); //extract the query
+            geocoder.geocode({'address': address}, function(results, status) {
+              if (status === google.maps.GeocoderStatus.OK) { //geocode found
+                var loc = results[0].geometry.location; //first geocode result
+                resultsMap.setCenter(loc);
+                var result = loc.toJSON(); //parse geocode as json (to be sent to backend)
+                console.log(loc.toString()); //test
+                
+                /*if(marker){ //if marker === true
+                  marker.setPosition(loc);
+                } 
+                
+                else{ //if marker === false
+                  marker= new google.maps.Marker({
+                  map: resultsMap,
+                  position: loc
+                });}*/
+              } 
+              
+              else {
+                alert('Geocode was not successful for the following reason: ' + status);
+              }
+            });
+          }
+          
+          function displayTweets(){
+            
+          }          
+          //TODO: display tweet below the search bar
+          
+          //setTimeout(function(),30000);
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgeV0LCFjds2BTJ-0uCK_sVeO34wmweTI&callback=init"
+            async defer></script>
+      <div id="map"></div>
+      </div>
+      <div class="row">
+        <div id="search-wrapper">
+          <div id="custom-search-input">
+            <div class="input-group">
+              <input type="text" class="form-control input-lg" id="query" placeholder="Search Location" />
+              <span class="input-group-btn">
+              <button class="btn btn-info btn-lg" id="submit" type="button">Submit
+              </button>
+                    </span>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
